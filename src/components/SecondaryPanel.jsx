@@ -64,24 +64,82 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
         <>
           <div className="panel-header">Layouts</div>
           <div className="panel-content">
+            {/* Advanced Layouts */}
+            <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Editorial Covers</div>
+            
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'magazine-cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'magazine-cover' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: '#ccc', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '4px solid white' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 800 }}>PARIS</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Magazine Cover</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'cover' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>TITLE</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Basic Cover</p>
+            </div>
+
+            <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Collages & Maps</div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'moodboard' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'moodboard' })}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(4, 1fr)', gap: '2px', width: '100%', height: '80px' }}>
+                {Array.from({length: 12}).map((_, i) => <div key={i} style={{ background: '#ccc' }}></div>)}
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Moodboard (14 pics)</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'map-page' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'map-page' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '1.5rem' }}>🗺️</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Trip Map</p>
+            </div>
+
+            <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Standard Grids</div>
+
             <div 
               style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'full' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
               onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'full' })}
             >
               <div style={{ width: '100%', height: '80px', background: '#ccc' }}></div>
-              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Full Bleed</p>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Full Page</p>
             </div>
             
             <div 
               style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'polaroid' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
               onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'polaroid' })}
             >
-              <div style={{ width: '100%', height: '80px', background: 'white', border: '1px solid #ccc', padding: '10px 10px 20px 10px' }}>
+              <div style={{ width: '100%', height: '80px', background: 'white', padding: '4px 4px 16px 4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                 <div style={{ width: '100%', height: '100%', background: '#ccc' }}></div>
               </div>
-              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Polaroid Style</p>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Polaroid</p>
             </div>
-            
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'polaroid-tape' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem', position: 'relative' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'polaroid-tape' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: 'white', padding: '4px 4px 16px 4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                <div style={{ width: '100%', height: '100%', background: '#ccc' }}></div>
+              </div>
+              <div style={{ position: 'absolute', top: '10px', right: '10px', width: '20px', height: '10px', background: 'rgba(255,255,255,0.8)', transform: 'rotate(45deg)' }}></div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Polaroid (Taped)</p>
+            </div>
+
             <div 
               style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'grid-2' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
               onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'grid-2' })}
@@ -91,6 +149,29 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
                 <div style={{ background: '#ccc' }}></div>
               </div>
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>2 Images (Split)</p>
+            </div>
+            
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'grid-3' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'grid-3' })}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '2fr 1fr', gap: '4px', width: '100%', height: '80px' }}>
+                <div style={{ background: '#ccc', gridColumn: '1 / span 2' }}></div>
+                <div style={{ background: '#ccc' }}></div>
+                <div style={{ background: '#ccc' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>3 Images (Focus)</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'asym-2' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'asym-2' })}
+            >
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '4px', width: '100%', height: '80px' }}>
+                <div style={{ background: '#ccc' }}></div>
+                <div style={{ background: '#ccc' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>2 Images (Asymmetric)</p>
             </div>
             
             <div 

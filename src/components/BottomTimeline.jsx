@@ -8,23 +8,30 @@ export default function BottomTimeline({ pages, activePageId, onAddPage, onSelec
       gridStyle = { ...gridStyle, background: 'white', padding: '4px 4px 12px 4px' };
     } else if (page.layout === 'grid-2') {
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px', background: 'white', padding: '2px' };
+    } else if (page.layout === 'asym-2') {
+      gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2px', background: 'white', padding: '2px' };
+    } else if (page.layout === 'grid-3') {
+      gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '2fr 1fr', gap: '2px', background: 'white', padding: '2px' };
     } else if (page.layout === 'grid-4') {
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '2px', background: 'white', padding: '2px' };
     }
 
     return (
       <div style={gridStyle}>
-        {page.slots.map((slot, idx) => (
-          <div key={idx} style={{ width: '100%', height: '100%', background: '#e2e8f0', overflow: 'hidden' }}>
-            {(slot.croppedImage || slot.image) ? (
-              <img 
-                src={slot.croppedImage || slot.image} 
-                alt={`Slot ${idx}`} 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-              />
-            ) : null}
-          </div>
-        ))}
+        {page.slots.map((slot, idx) => {
+          const isGrid3First = page.layout === 'grid-3' && idx === 0;
+          return (
+            <div key={idx} style={{ width: '100%', height: '100%', background: '#e2e8f0', overflow: 'hidden', gridColumn: isGrid3First ? '1 / span 2' : 'auto' }}>
+              {(slot.croppedImage || slot.image) ? (
+                <img 
+                  src={slot.croppedImage || slot.image} 
+                  alt={`Slot ${idx}`} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+              ) : null}
+            </div>
+          );
+        })}
       </div>
     );
   };

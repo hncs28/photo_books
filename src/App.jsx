@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import './App.css';
 import BookConfigModal from './components/BookConfigModal';
+import ThemeSelection from './components/ThemeSelection';
+import PhotoUploadStep from './components/PhotoUploadStep';
 import PrimarySidebar from './components/PrimarySidebar';
 import SecondaryPanel from './components/SecondaryPanel';
 import BottomTimeline from './components/BottomTimeline';
@@ -9,8 +11,11 @@ import BookPreview from './components/BookPreview';
 import { BookOpen, Download } from 'lucide-react';
 
 function App() {
+  const [currentStep, setCurrentStep] = useState('size'); // 'size', 'theme', 'upload', 'editor'
   const [bookConfig, setBookConfig] = useState(null);
-  const [pages, setPages] = useState([{ id: crypto.randomUUID(), layout: 'full', slots: [{ image: null, croppedImage: null }], text: '' }]);
+  const [bookTheme, setBookTheme] = useState(null);
+  
+  const [pages, setPages] = useState([{ id: crypto.randomUUID(), layout: 'full', slots: [{ image: null, croppedImage: null }], text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } } }]);
   const [activePageId, setActivePageId] = useState(pages[0].id);
   const [showPreview, setShowPreview] = useState(false);
   
@@ -20,10 +25,33 @@ function App() {
 
   const handleSelectBookSize = (size) => {
     setBookConfig(size);
+    setCurrentStep('theme');
+  };
+
+  const handleSelectTheme = (theme) => {
+    setBookTheme(theme);
+    // Apply theme defaults to the first page
+    const newPage = { 
+      id: pages[0].id, 
+      layout: theme.defaultLayout, 
+      slots: Array.from({ length: getSlotsForLayout(theme.defaultLayout) }, () => ({ image: null, croppedImage: null })),
+      text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } }
+    };
+    setPages([newPage]);
+    setCurrentStep('upload');
+  };
+
+  const getSlotsForLayout = (layout) => {
+    if (layout === 'moodboard') return 14;
+    if (layout === 'grid-4') return 4;
+    if (layout === 'grid-3') return 3;
+    if (layout === 'grid-2' || layout === 'asym-2') return 2;
+    if (layout === 'map-page') return 0;
+    return 1; // full, polaroid, cover, magazine-cover, polaroid-tape
   };
 
   const handleAddPage = () => {
-    const newPage = { id: crypto.randomUUID(), layout: 'full', slots: [{ image: null, croppedImage: null }], text: '' };
+    const newPage = { id: crypto.randomUUID(), layout: 'full', slots: [{ image: null, croppedImage: null }], text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } } };
     setPages([...pages, newPage]);
     setActivePageId(newPage.id);
   };
@@ -43,11 +71,9 @@ function App() {
         if (p.id === id) {
           const newPage = { ...p, ...updates };
           
-          // Adjust slots if layout changes
+            // Adjust slots if layout changes
           if (updates.layout && updates.layout !== p.layout) {
-            let requiredSlots = 1;
-            if (updates.layout === 'grid-2') requiredSlots = 2;
-            if (updates.layout === 'grid-4') requiredSlots = 4;
+            let requiredSlots = getSlotsForLayout(updates.layout);
             
             const newSlots = [...newPage.slots];
             // Truncate or pad with empty slots
@@ -87,30 +113,65 @@ function App() {
     }));
   }, [activePageId]);
 
-  const handleAutofill = useCallback(() => {
-    if (uploadedImages.length === 0) return;
+  const handleAutofill = useCallback((imagesToFill) => {
+    const images = imagesToFill || uploadedImages;
+    if (images.length === 0) return;
     
-    // For simplicity, we create a full new book, assigning 1 image per slot, using 'full' layout.
-    // If we wanted to keep layouts, we'd need more complex logic. 
-    // Let's create single-slot pages for all autofill images to be safe.
-    const finalPages = uploadedImages.map(imgUrl => ({ 
-      id: crypto.randomUUID(), 
-      layout: 'full', 
-      slots: [{ image: imgUrl, croppedImage: null }], 
-      text: '' 
-    }));
+    const layout = bookTheme ? bookTheme.defaultLayout : 'full';
+    const slotsPerPage = getSlotsForLayout(layout);
+    
+    const finalPages = [];
+    
+    // Always create a Cover Page first
+    finalPages.push({
+      id: crypto.randomUUID(),
+      layout: 'magazine-cover',
+      slots: [{ image: images[0] || null, croppedImage: null }],
+      text: { 
+        title: { text: 'PARIS', x: 0, y: 0 }, 
+        subtitle: { text: 'THE FEBRUARY 2026 EDIT', x: 0, y: 0 }, 
+        body: { text: "Your Name's\nPARIS Chapter\n\nThis chapter was created during my time spent in Paris...", x: 0, y: 0 },
+        extra: { text: 'Curated\nMOMENTS', x: 0, y: 0 }
+      }
+    });
+    
+    // Use the rest of the images for the inside pages
+    const remainingImages = images.slice(1);
+    
+    for (let i = 0; i < remainingImages.length; i += slotsPerPage) {
+      const pageImages = remainingImages.slice(i, i + slotsPerPage);
+      const slots = Array.from({ length: slotsPerPage }, (_, idx) => ({
+        image: pageImages[idx] || null,
+        croppedImage: null
+      }));
+      
+      finalPages.push({
+        id: crypto.randomUUID(),
+        layout: layout,
+        slots: slots,
+        text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } }
+      });
+    }
     
     setPages(finalPages);
     setActivePageId(finalPages[0].id);
-  }, [uploadedImages, pages]);
+  }, [uploadedImages, bookTheme]);
+
+  const handleUploadComplete = (images) => {
+    setUploadedImages(images);
+    handleAutofill(images);
+    setCurrentStep('editor');
+  };
 
   const activePage = pages.find(p => p.id === activePageId);
 
   return (
     <div className="app-container" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      {!bookConfig && <BookConfigModal onSelect={handleSelectBookSize} />}
+      {currentStep === 'size' && <BookConfigModal onSelect={handleSelectBookSize} />}
+      {currentStep === 'theme' && <ThemeSelection onSelect={handleSelectTheme} />}
+      {currentStep === 'upload' && <PhotoUploadStep onComplete={handleUploadComplete} />}
       
-      {bookConfig && (
+      {currentStep === 'editor' && bookConfig && (
         <>
           <header className="app-header">
             <div className="app-title">Photo Book Design</div>
@@ -140,6 +201,7 @@ function App() {
               <PageCanvas 
                 page={activePage}
                 bookConfig={bookConfig}
+                bookTheme={bookTheme}
                 onUpdatePage={handleUpdatePage}
               />
               <BottomTimeline 
@@ -159,6 +221,7 @@ function App() {
         <BookPreview 
           pages={pages} 
           bookConfig={bookConfig} 
+          bookTheme={bookTheme}
           onClose={() => setShowPreview(false)} 
         />
       )}
