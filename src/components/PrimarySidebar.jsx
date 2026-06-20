@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, LayoutTemplate, Palette, Type } from 'lucide-react';
+import { Image, LayoutTemplate, Palette, Type, Smile } from 'lucide-react';
 
 const TABS = [
   { id: 'uploads', icon: Image, label: 'Uploads' },
   { id: 'layouts', icon: LayoutTemplate, label: 'Layouts' },
   { id: 'text', icon: Type, label: 'Text' },
-  { id: 'backgrounds', icon: Palette, label: 'Backgrounds' }
+  { id: 'backgrounds', icon: Palette, label: 'Backgrounds' },
+  { id: 'stickers', icon: Smile, label: 'Stickers' }
 ];
 
 export default function PrimarySidebar({ activeTab, onTabSelect }) {

@@ -54,6 +54,42 @@ const THEMES = [
     textColor: '#1e1e1e',
     defaultLayout: 'grid-4',
     preview: 'linear-gradient(to right, #fdf4ff, #fef08a)'
+  },
+  {
+    id: 'city-pop',
+    name: 'City Pop Blue',
+    description: 'Sky blue gradient with cute Amsterdam houses illustration.',
+    bgColor: 'linear-gradient(to bottom, #7dd3fc, #e0f2fe)',
+    textColor: '#0f172a',
+    defaultLayout: 'city-pop-cover',
+    preview: 'linear-gradient(to bottom, #7dd3fc, #e0f2fe)'
+  },
+  {
+    id: 'y2k-pastel',
+    name: 'Y2K Pastel',
+    description: 'Vibrant lavender/pink checkerboard with daisy sticker design.',
+    bgColor: '#faf5ff', // Handled via class inside component, fallback to solid purple
+    textColor: '#5b21b6',
+    defaultLayout: 'y2k-sticker-cover',
+    preview: 'linear-gradient(135deg, #fae8ff 25%, #faf5ff 25%, #faf5ff 50%, #fae8ff 50%, #fae8ff 75%, #faf5ff 75%)'
+  },
+  {
+    id: 'groovy-70s',
+    name: 'Groovy 70s',
+    description: 'Warm 70s gradient with waves and fun flower power styling.',
+    bgColor: 'linear-gradient(135deg, #ff7e5f, #ffe066)',
+    textColor: '#7c2d12',
+    defaultLayout: 'retro-groovy-cover',
+    preview: 'linear-gradient(135deg, #ff7e5f, #ffe066)'
+  },
+  {
+    id: 'comic-punch',
+    name: 'Comic Punch',
+    description: 'Bright yellow halftone background with pop art styling.',
+    bgColor: '#fef08a',
+    textColor: '#000000',
+    defaultLayout: 'comic-pop-cover',
+    preview: 'radial-gradient(#fb7185 20%, #fef08a 20%)'
   }
 ];
 

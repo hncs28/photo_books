@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { UploadCloud } from 'lucide-react';
+import { STICKER_ASSETS } from '../utils/stickers';
 
-export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUpload, onImageSelect, onAutofill, onUpdatePage, activePage }) {
+export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUpload, onImageSelect, onAutofill, onUpdatePage, activePage, onAddSticker }) {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       const newImages = acceptedFiles.map(file => URL.createObjectURL(file));
@@ -85,6 +86,58 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
                 <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>TITLE</span>
               </div>
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Basic Cover</p>
+            </div>
+
+            {/* Teen & Playful Covers */}
+            <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Teen & Playful Covers</div>
+            
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'city-pop-cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'city-pop-cover' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: 'linear-gradient(to bottom, #7dd3fc, #bae6fd)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', borderRadius: '4px' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, fontFamily: 'Fredoka', color: '#0f172a', zIndex: 10 }}>CITY POP</span>
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '25px', display: 'flex', gap: '2px', alignItems: 'flex-end', justifyContent: 'center', zIndex: 5 }}>
+                  <div style={{ width: '12px', height: '18px', background: '#fb7185', borderRadius: '2px 2px 0 0' }}></div>
+                  <div style={{ width: '14px', height: '25px', background: '#f59e0b', borderRadius: '2px 2px 0 0' }}></div>
+                  <div style={{ width: '12px', height: '15px', background: '#10b981', borderRadius: '2px 2px 0 0' }}></div>
+                  <div style={{ width: '15px', height: '22px', background: '#3b82f6', borderRadius: '2px 2px 0 0' }}></div>
+                </div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>City Pop Cover</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'y2k-sticker-cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'y2k-sticker-cover' })}
+            >
+              <div className="y2k-checkered-bg" style={{ width: '100%', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', borderRadius: '4px' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, fontFamily: 'Syne', color: '#5b21b6' }}>Y2K POP</span>
+                <span style={{ position: 'absolute', top: '5px', left: '10px', fontSize: '10px' }}>🌸</span>
+                <span style={{ position: 'absolute', bottom: '5px', right: '10px', fontSize: '10px' }}>⭐</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Y2K Sticker Cover</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'retro-groovy-cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'retro-groovy-cover' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: 'linear-gradient(135deg, #ff7e5f, #ffe066)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative', borderRadius: '4px' }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, fontFamily: 'Chewy', color: '#7c2d12' }}>GROOVY</span>
+                <span style={{ position: 'absolute', bottom: '5px', left: '15px', fontSize: '12px' }}>🌻</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Groovy 70s Cover</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'comic-pop-cover' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'comic-pop-cover' })}
+            >
+              <div className="comic-pop-bg" style={{ width: '100%', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '3px solid black', boxSizing: 'border-box', borderRadius: '4px' }}>
+                <span style={{ fontSize: '1rem', fontWeight: 900, fontFamily: 'Bungee', color: '#000000', WebkitTextStroke: '1px white' }}>POW!</span>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Comic Book Cover</p>
             </div>
 
             <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Collages & Maps</div>
@@ -211,6 +264,34 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
               Add a Caption
             </button>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '1rem' }}>Click to add a caption to the active page. You can edit the text directly on the canvas.</p>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'stickers' && (
+        <>
+          <div className="panel-header">Stickers</div>
+          <div className="panel-content">
+            <div className="sticker-grid">
+              {Object.entries(STICKER_ASSETS).map(([id, sticker]) => {
+                const StickerSvg = sticker.render;
+                return (
+                  <div 
+                    key={id} 
+                    className="sticker-card" 
+                    onClick={() => onAddSticker && onAddSticker(id)}
+                    title={sticker.name}
+                  >
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <StickerSvg />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '1rem', textAlign: 'center' }}>
+              Click a sticker to add it to the active page.
+            </p>
           </div>
         </>
       )}

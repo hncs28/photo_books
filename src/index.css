@@ -14,6 +14,10 @@
   /* Typography */
   --font-family: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: 'Playfair Display', serif;
+  --font-rounded: 'Fredoka', sans-serif;
+  --font-chunky: 'Chewy', sans-serif;
+  --font-wavy: 'Syne', sans-serif;
+  --font-display: 'Bungee', sans-serif;
 
   /* Effects */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -166,3 +170,92 @@ button {
 .animate-fade-in {
   animation: fadeIn var(--transition-normal) forwards;
 }
+
+/* Y2K Checkered Background Style */
+.y2k-checkered-bg {
+  background-color: #faf5ff !important;
+  background-image: 
+    linear-gradient(45deg, #fae8ff 25%, transparent 25%), 
+    linear-gradient(-45deg, #fae8ff 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #fae8ff 75%), 
+    linear-gradient(-45deg, transparent 75%, #fae8ff 75%) !important;
+  background-size: 40px 40px !important;
+  background-position: 0 0, 0 20px, 20px -20px, -20px 0px !important;
+}
+
+/* Comic Halftone Background Style */
+.comic-pop-bg {
+  background-color: #fef08a !important;
+  background-image: radial-gradient(#fb7185 20%, transparent 20%) !important;
+  background-size: 20px 20px !important;
+}
+
+/* Groovy Waves Background Style */
+.groovy-waves-bg {
+  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 50%, #ffe066 100%) !important;
+}
+
+/* City Pop Background Style */
+.city-pop-bg {
+  background: linear-gradient(to bottom, #7dd3fc 0%, #bae6fd 60%, #e0f2fe 100%) !important;
+}
+
+/* Floating Sticker Animations */
+@keyframes float-slow {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes float-medium {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(-6deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.sticker-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.sticker-float-medium {
+  animation: float-medium 3s ease-in-out infinite;
+}
+
+/* Comic Speech Bubble Component */
+.comic-speech-bubble {
+  position: relative;
+  background: #ffffff;
+  border: 3px solid #000000;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  box-shadow: 4px 4px 0px #000000;
+  display: inline-block;
+  pointer-events: auto;
+}
+
+.comic-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 20px;
+  border-width: 13px 13px 0 0;
+  border-style: solid;
+  border-color: #ffffff transparent;
+  display: block;
+  width: 0;
+}
+
+.comic-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 18px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: #000000 transparent;
+  display: block;
+  width: 0;
+}
+

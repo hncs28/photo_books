@@ -35,7 +35,9 @@ function App() {
       id: pages[0].id, 
       layout: theme.defaultLayout, 
       slots: Array.from({ length: getSlotsForLayout(theme.defaultLayout) }, () => ({ image: null, croppedImage: null })),
-      text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } }
+      text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } },
+      backSlots: Array.from({ length: 4 }, () => ({ image: null, croppedImage: null })),
+      backText: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '2026', x: 0, y: 0 } }
     };
     setPages([newPage]);
     setCurrentStep('upload');
@@ -47,6 +49,10 @@ function App() {
     if (layout === 'grid-3') return 3;
     if (layout === 'grid-2' || layout === 'asym-2') return 2;
     if (layout === 'map-page') return 0;
+    if (layout === 'y2k-sticker-cover') return 2;
+    if (layout === 'comic-pop-cover') return 2;
+    if (layout === 'city-pop-cover') return 1;
+    if (layout === 'retro-groovy-cover') return 1;
     return 1; // full, polaroid, cover, magazine-cover, polaroid-tape
   };
 
@@ -113,44 +119,199 @@ function App() {
     }));
   }, [activePageId]);
 
+  const handleAddSticker = useCallback((stickerType) => {
+    setPages(prevPages => prevPages.map(p => {
+      if (p.id === activePageId) {
+        const newSticker = {
+          id: crypto.randomUUID(),
+          type: stickerType,
+          x: 100, // Initial x coordinates
+          y: 100, // Initial y coordinates
+          scale: 1.0,
+          rotation: 0
+        };
+        return {
+          ...p,
+          stickers: [...(p.stickers || []), newSticker]
+        };
+      }
+      return p;
+    }));
+  }, [activePageId]);
+
+  const handleUpdateSticker = useCallback((pageId, stickerId, updates) => {
+    setPages(prevPages => prevPages.map(p => {
+      if (p.id === pageId) {
+        return {
+          ...p,
+          stickers: (p.stickers || []).map(s => {
+            if (s.id === stickerId) {
+              return { ...s, ...updates };
+            }
+            return s;
+          })
+        };
+      }
+      return p;
+    }));
+  }, []);
+
+  const handleRemoveSticker = useCallback((pageId, stickerId) => {
+    setPages(prevPages => prevPages.map(p => {
+      if (p.id === pageId) {
+        return {
+          ...p,
+          stickers: (p.stickers || []).filter(s => s.id !== stickerId)
+        };
+      }
+      return p;
+    }));
+  }, []);
+
   const handleAutofill = useCallback((imagesToFill) => {
     const images = imagesToFill || uploadedImages;
     if (images.length === 0) return;
     
-    const layout = bookTheme ? bookTheme.defaultLayout : 'full';
-    const slotsPerPage = getSlotsForLayout(layout);
-    
     const finalPages = [];
+    const coverLayout = bookTheme ? bookTheme.defaultLayout : 'magazine-cover';
+    const insideLayout = bookTheme && !bookTheme.defaultLayout.includes('cover') ? bookTheme.defaultLayout : 'full';
+    const slotsPerPage = getSlotsForLayout(insideLayout);
+    const coverSlotsCount = getSlotsForLayout(coverLayout);
     
-    // Always create a Cover Page first
+    let backCoverSlots, coverSlots, remainingImagesIndex;
+    if (images.length >= 5) {
+      backCoverSlots = Array.from({ length: 4 }, (_, idx) => ({
+        image: images[idx] || null,
+        croppedImage: null
+      }));
+      coverSlots = Array.from({ length: coverSlotsCount }, (_, idx) => ({
+        image: images[4 + idx] || null,
+        croppedImage: null
+      }));
+      remainingImagesIndex = 4 + coverSlotsCount;
+    } else {
+      coverSlots = Array.from({ length: coverSlotsCount }, (_, idx) => ({
+        image: images[idx] || null,
+        croppedImage: null
+      }));
+      backCoverSlots = Array.from({ length: 4 }, (_, idx) => ({
+        image: images[coverSlotsCount + idx] || null,
+        croppedImage: null
+      }));
+      remainingImagesIndex = coverSlotsCount + 4;
+    }
+
+    let coverText = { 
+      title: { text: 'PARIS', x: 0, y: 0 }, 
+      subtitle: { text: 'THE FEBRUARY 2026 EDIT', x: 0, y: 0 }, 
+      body: { text: "Your Name's\nPARIS Chapter\n\nThis chapter was created during my time spent in Paris...", x: 0, y: 0 },
+      extra: { text: 'Curated\nMOMENTS', x: 0, y: 0 }
+    };
+    
+    if (coverLayout === 'city-pop-cover') {
+      coverText = {
+        title: { text: 'AMSTERDAM', x: 0, y: 0 },
+        subtitle: { text: 'NETHERLANDS', x: 0, y: 0 },
+        body: { text: 'AMSTERDAM 2026', x: 0, y: 0 },
+        extra: { text: 'EXPLORING THE CANALS & CYCLING AROUND THE CITY', x: 0, y: 0 }
+      };
+    } else if (coverLayout === 'y2k-sticker-cover') {
+      coverText = {
+        title: { text: 'MEMORIES', x: 0, y: 0 },
+        subtitle: { text: 'COOL VIBES ONLY', x: 0, y: 0 },
+        body: { text: 'EST. 2026', x: 0, y: 0 },
+        extra: { text: 'BEST DAYS', x: 0, y: 0 }
+      };
+    } else if (coverLayout === 'retro-groovy-cover') {
+      coverText = {
+        title: { text: 'GOOD VIBES', x: 0, y: 0 },
+        subtitle: { text: 'GOLDEN DAYS', x: 0, y: 0 },
+        body: { text: 'SINCE 2026', x: 0, y: 0 },
+        extra: { text: '🌻 FLOWER POWER 🌻', x: 0, y: 0 }
+      };
+    } else if (coverLayout === 'comic-pop-cover') {
+      coverText = {
+        title: { text: 'OMG!', x: 0, y: 0 },
+        subtitle: { text: 'BEST TRIP EVER!', x: 0, y: 0 },
+        body: { text: 'TO BE CONTINUED...', x: 0, y: 0 },
+        extra: { text: 'WHAM! POW!', x: 0, y: 0 }
+      };
+    }
+
     finalPages.push({
       id: crypto.randomUUID(),
-      layout: 'magazine-cover',
-      slots: [{ image: images[0] || null, croppedImage: null }],
-      text: { 
-        title: { text: 'PARIS', x: 0, y: 0 }, 
-        subtitle: { text: 'THE FEBRUARY 2026 EDIT', x: 0, y: 0 }, 
-        body: { text: "Your Name's\nPARIS Chapter\n\nThis chapter was created during my time spent in Paris...", x: 0, y: 0 },
-        extra: { text: 'Curated\nMOMENTS', x: 0, y: 0 }
+      layout: coverLayout,
+      slots: coverSlots,
+      text: coverText,
+      backSlots: backCoverSlots,
+      backText: {
+        title: { text: coverText.title?.text || '', x: 0, y: 0 },
+        subtitle: { text: '2026', x: 0, y: 0 }
       }
     });
     
     // Use the rest of the images for the inside pages
-    const remainingImages = images.slice(1);
+    const remainingImages = images.slice(remainingImagesIndex);
+    let imgIdx = 0;
     
-    for (let i = 0; i < remainingImages.length; i += slotsPerPage) {
-      const pageImages = remainingImages.slice(i, i + slotsPerPage);
-      const slots = Array.from({ length: slotsPerPage }, (_, idx) => ({
-        image: pageImages[idx] || null,
+    // Available layouts categorized by number of slots
+    const layoutsBySlots = {
+      1: ['full', 'polaroid', 'polaroid-tape'],
+      2: ['grid-2', 'asym-2'],
+      3: ['grid-3'],
+      4: ['grid-4'],
+      14: ['moodboard']
+    };
+    
+    while (imgIdx < remainingImages.length) {
+      const remainingCount = remainingImages.length - imgIdx;
+      let slotsCount = 1;
+      
+      // Determine next page slot size based on remaining count
+      if (remainingCount >= 14 && Math.random() < 0.15) {
+        // 15% chance of a moodboard if there are at least 14 photos remaining
+        slotsCount = 14;
+      } else if (remainingCount >= 4) {
+        // Mix of single-image (25%), double-image (35%), triple-image (20%), and quad-image (20%)
+        const rand = Math.random();
+        if (rand < 0.25) slotsCount = 1;
+        else if (rand < 0.60) slotsCount = 2;
+        else if (rand < 0.80) slotsCount = 3;
+        else slotsCount = 4;
+      } else if (remainingCount === 3) {
+        const rand = Math.random();
+        if (rand < 0.3) slotsCount = 1;
+        else if (rand < 0.7) slotsCount = 2;
+        else slotsCount = 3;
+      } else if (remainingCount === 2) {
+        const rand = Math.random();
+        if (rand < 0.4) slotsCount = 1;
+        else slotsCount = 2;
+      } else {
+        slotsCount = 1;
+      }
+      
+      const availableLayouts = layoutsBySlots[slotsCount] || ['full'];
+      const selectedLayout = availableLayouts[Math.floor(Math.random() * availableLayouts.length)];
+      
+      const pageImages = remainingImages.slice(imgIdx, imgIdx + slotsCount);
+      const slots = pageImages.map(imgUrl => ({
+        image: imgUrl,
         croppedImage: null
       }));
       
+      while (slots.length < slotsCount) {
+        slots.push({ image: null, croppedImage: null });
+      }
+      
       finalPages.push({
         id: crypto.randomUUID(),
-        layout: layout,
+        layout: selectedLayout,
         slots: slots,
         text: { title: { text: '', x: 0, y: 0 }, subtitle: { text: '', x: 0, y: 0 }, body: { text: '', x: 0, y: 0 } }
       });
+      
+      imgIdx += slotsCount;
     }
     
     setPages(finalPages);
@@ -195,14 +356,20 @@ function App() {
               onAutofill={handleAutofill}
               onUpdatePage={handleUpdatePage}
               activePage={activePage}
+              onAddSticker={handleAddSticker}
             />
             
             <div className="canvas-area">
               <PageCanvas 
                 page={activePage}
+                pages={pages}
+                activePageId={activePageId}
+                onSelectPage={setActivePageId}
                 bookConfig={bookConfig}
                 bookTheme={bookTheme}
                 onUpdatePage={handleUpdatePage}
+                onUpdateSticker={handleUpdateSticker}
+                onRemoveSticker={handleRemoveSticker}
               />
               <BottomTimeline 
                 pages={pages}
