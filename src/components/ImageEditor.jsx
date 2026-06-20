@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import Cropper from 'react-easy-crop';
 import { Check, X, ZoomIn, ZoomOut } from 'lucide-react';
 import getCroppedImg from '../utils/cropImage';
@@ -21,7 +22,7 @@ export default function ImageEditor({ image, aspectRatio, onSave, onCancel }) {
     }
   };
 
-  return (
+  return createPortal(
     <div style={{ 
       position: 'fixed', 
       inset: 0, 
@@ -142,6 +143,7 @@ export default function ImageEditor({ image, aspectRatio, onSave, onCancel }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

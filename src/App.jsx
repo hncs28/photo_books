@@ -259,8 +259,7 @@ function App() {
       1: ['full', 'polaroid', 'polaroid-tape'],
       2: ['grid-2', 'asym-2'],
       3: ['grid-3'],
-      4: ['grid-4'],
-      14: ['moodboard']
+      4: ['grid-4']
     };
     
     while (imgIdx < remainingImages.length) {
@@ -268,10 +267,7 @@ function App() {
       let slotsCount = 1;
       
       // Determine next page slot size based on remaining count
-      if (remainingCount >= 14 && Math.random() < 0.15) {
-        // 15% chance of a moodboard if there are at least 14 photos remaining
-        slotsCount = 14;
-      } else if (remainingCount >= 4) {
+      if (remainingCount >= 4) {
         // Mix of single-image (25%), double-image (35%), triple-image (20%), and quad-image (20%)
         const rand = Math.random();
         if (rand < 0.25) slotsCount = 1;
