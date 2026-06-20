@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import { UploadCloud } from 'lucide-react';
 import { STICKER_ASSETS } from '../utils/stickers';
 
-export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUpload, onImageSelect, onAutofill, onUpdatePage, activePage, onAddSticker }) {
+export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUpload, onImageSelect, onAutofill, onUpdatePage, activePage, onAddSticker, onClosePanel, isCollapsed }) {
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       const newImages = acceptedFiles.map(file => URL.createObjectURL(file));
@@ -17,20 +17,29 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
   });
 
   return (
-    <div className="secondary-panel">
+    <div className={`secondary-panel ${isCollapsed ? 'collapsed' : ''}`}>
       {activeTab === 'uploads' && (
         <>
           <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span>Upload Media</span>
-            {uploadedImages.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {uploadedImages.length > 0 && (
+                <button 
+                  className="btn btn-primary" 
+                  style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                  onClick={onAutofill}
+                >
+                  Autofill
+                </button>
+              )}
               <button 
-                className="btn btn-primary" 
-                style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-                onClick={onAutofill}
+                onClick={onClosePanel} 
+                style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', display: 'flex', alignItems: 'center' }}
+                title="Collapse Panel"
               >
-                Autofill Book
+                ✕
               </button>
-            )}
+            </div>
           </div>
           <div className="panel-content">
             <div 
@@ -63,7 +72,16 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
 
       {activeTab === 'layouts' && (
         <>
-          <div className="panel-header">Layouts</div>
+          <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Layouts</span>
+            <button 
+              onClick={onClosePanel} 
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', display: 'flex', alignItems: 'center' }}
+              title="Collapse Panel"
+            >
+              ✕
+            </button>
+          </div>
           <div className="panel-content">
             {/* Advanced Layouts */}
             <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Editorial Covers</div>
@@ -245,7 +263,16 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
 
       {activeTab === 'backgrounds' && (
         <>
-          <div className="panel-header">Backgrounds</div>
+          <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Backgrounds</span>
+            <button 
+              onClick={onClosePanel} 
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', display: 'flex', alignItems: 'center' }}
+              title="Collapse Panel"
+            >
+              ✕
+            </button>
+          </div>
           <div className="panel-content">
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Select a page background color or texture. (Coming Soon)</p>
           </div>
@@ -254,7 +281,16 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
 
       {activeTab === 'text' && (
         <>
-          <div className="panel-header">Text & Captions</div>
+          <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Text & Captions</span>
+            <button 
+              onClick={onClosePanel} 
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', display: 'flex', alignItems: 'center' }}
+              title="Collapse Panel"
+            >
+              ✕
+            </button>
+          </div>
           <div className="panel-content">
             <button 
               className="btn btn-secondary" 
@@ -270,7 +306,16 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
 
       {activeTab === 'stickers' && (
         <>
-          <div className="panel-header">Stickers</div>
+          <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Stickers</span>
+            <button 
+              onClick={onClosePanel} 
+              style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem', display: 'flex', alignItems: 'center' }}
+              title="Collapse Panel"
+            >
+              ✕
+            </button>
+          </div>
           <div className="panel-content">
             <div className="sticker-grid">
               {Object.entries(STICKER_ASSETS).map(([id, sticker]) => {

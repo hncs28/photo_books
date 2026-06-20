@@ -70,6 +70,13 @@
   display: flex;
   flex-direction: column;
   z-index: 10;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.secondary-panel.collapsed {
+  width: 0 !important;
+  border-right: none !important;
 }
 
 .panel-header {
@@ -620,6 +627,7 @@
   .btn {
     padding: 0.35rem 0.6rem;
     font-size: 0.75rem;
+    white-space: nowrap !important;
   }
   
   .modal-content {
@@ -632,6 +640,23 @@
     flex-direction: column !important;
     grid-template-columns: 1fr !important;
     gap: 0.75rem !important;
+  }
+}
+
+/* Extra Small Devices (Mobile Portrait) */
+@media (max-width: 480px) {
+  .btn-text {
+    display: none !important;
+  }
+  
+  .app-header .btn {
+    padding: 0.5rem !important;
+    border-radius: var(--radius-full) !important;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

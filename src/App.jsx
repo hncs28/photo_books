@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import './App.css';
 import BookConfigModal from './components/BookConfigModal';
 import ThemeSelection from './components/ThemeSelection';
@@ -22,6 +22,14 @@ function App() {
   // Canva-style workspace state
   const [activeTab, setActiveTab] = useState('uploads');
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+
+  // Initialize panel state on mount based on screen width
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsPanelOpen(window.innerWidth > 768);
+    }
+  }, []);
 
   const handleSelectBookSize = (size) => {
     setBookConfig(size);
@@ -320,6 +328,15 @@ function App() {
     setCurrentStep('editor');
   };
 
+  const handleTabSelect = useCallback((tabId) => {
+    if (activeTab === tabId) {
+      setIsPanelOpen(prev => !prev);
+    } else {
+      setActiveTab(tabId);
+      setIsPanelOpen(true);
+    }
+  }, [activeTab]);
+
   const activePage = pages.find(p => p.id === activePageId);
 
   return (
@@ -332,18 +349,18 @@ function App() {
         <>
           <header className="app-header">
             <div className="app-title">Photo Book Design</div>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button className="btn btn-secondary" onClick={() => setShowPreview(true)}>
-                <BookOpen size={18} /> Preview
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className="btn btn-secondary" onClick={() => setShowPreview(true)} title="Preview Book">
+                <BookOpen size={18} /> <span className="btn-text">Preview</span>
               </button>
-              <button className="btn btn-primary">
-                <Download size={18} /> Export
+              <button className="btn btn-primary" title="Export Book">
+                <Download size={18} /> <span className="btn-text">Export</span>
               </button>
             </div>
           </header>
 
           <div className="main-workspace">
-            <PrimarySidebar activeTab={activeTab} onTabSelect={setActiveTab} />
+            <PrimarySidebar activeTab={activeTab} onTabSelect={handleTabSelect} />
             <SecondaryPanel 
               activeTab={activeTab} 
               uploadedImages={uploadedImages} 
@@ -353,6 +370,8 @@ function App() {
               onUpdatePage={handleUpdatePage}
               activePage={activePage}
               onAddSticker={handleAddSticker}
+              onClosePanel={() => setIsPanelOpen(false)}
+              isCollapsed={!isPanelOpen}
             />
             
             <div className="canvas-area">
