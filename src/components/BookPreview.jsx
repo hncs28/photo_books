@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import { X } from 'lucide-react';
 import { STICKER_ASSETS } from '../utils/stickers';
@@ -517,8 +517,33 @@ const Page = forwardRef(({ page, index, bookTheme }, ref) => {
 });
 
 export default function BookPreview({ pages, bookConfig, bookTheme, onClose }) {
-  const height = 600;
-  const width = height * bookConfig.aspectRatio;
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1000,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowSize.width <= 768;
+  const maxPreviewHeight = isMobile ? windowSize.height * 0.55 : windowSize.height * 0.75;
+  let height = Math.min(600, maxPreviewHeight);
+  let width = height * bookConfig.aspectRatio;
+
+  // Ensure double-page spread fits screen width
+  const maxDoublePageWidth = windowSize.width * 0.9;
+  if (width * 2 > maxDoublePageWidth) {
+    width = maxDoublePageWidth / 2;
+    height = width / bookConfig.aspectRatio;
+  }
 
   const previewPages = [...pages];
   if (previewPages.length % 2 !== 0) {
@@ -529,20 +554,20 @@ export default function BookPreview({ pages, bookConfig, bookTheme, onClose }) {
     <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
       <button 
         className="btn btn-secondary" 
-        style={{ position: 'absolute', top: '2rem', right: '2rem' }}
+        style={{ position: 'absolute', top: isMobile ? '1rem' : '2rem', right: isMobile ? '1rem' : '2rem' }}
         onClick={onClose}
       >
         <X size={20} /> Close Preview
       </button>
 
-      <div className="book-preview-container animate-fade-in">
+      <div className="book-preview-container animate-fade-in" style={{ padding: isMobile ? '0 1rem' : '0' }}>
         <HTMLFlipBook 
           width={width} 
           height={height}
           size="fixed"
-          minWidth={300}
+          minWidth={150}
           maxWidth={width}
-          minHeight={400}
+          minHeight={200}
           maxHeight={height}
           maxShadowOpacity={0.5}
           showCover={true}
@@ -555,7 +580,7 @@ export default function BookPreview({ pages, bookConfig, bookTheme, onClose }) {
         </HTMLFlipBook>
       </div>
 
-      <div style={{ color: 'white', marginTop: '2rem', opacity: 0.7 }}>
+      <div style={{ color: 'white', marginTop: isMobile ? '1rem' : '2rem', opacity: 0.7, fontSize: isMobile ? '0.8rem' : '1rem' }}>
         Drag page corners or click to flip pages
       </div>
     </div>

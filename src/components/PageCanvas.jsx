@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ImagePlus, Edit3 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -179,6 +179,14 @@ function ImageSlot({ slot, index, pageId, layout, bookConfig, onUpdateSlot }) {
 }
 
 export default function PageCanvas({ page, pages, activePageId, onSelectPage, bookConfig, bookTheme, onUpdatePage, onUpdateSticker, onRemoveSticker }) {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1000);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (!page) {
     return (
       <div className="canvas-container">
@@ -189,7 +197,8 @@ export default function PageCanvas({ page, pages, activePageId, onSelectPage, bo
 
   // Calculate sizes for spreads side-by-side
   const maxHeight = 480;
-  const maxWidth = 960;
+  const isMobileScreen = windowWidth <= 768;
+  const maxWidth = isMobileScreen ? (windowWidth - 32) : Math.min(960, windowWidth - 450);
   let height = maxHeight;
   let width = height * bookConfig.aspectRatio; // single page width
 
