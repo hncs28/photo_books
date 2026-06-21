@@ -14,6 +14,16 @@ export default function BottomTimeline({ pages, activePageId, onAddPage, onSelec
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '2fr 1fr', gap: '2px', background: 'white', padding: '2px' };
     } else if (page.layout === 'grid-4') {
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '2px', background: 'white', padding: '2px' };
+    } else if (page.layout === 'filmstrip') {
+      gridStyle = { ...gridStyle, background: '#111', display: 'flex', alignItems: 'center', gap: '2px', padding: '8px 3px' };
+    } else if (page.layout === 'circle-focus') {
+      gridStyle = { ...gridStyle, background: 'linear-gradient(135deg, #e0e7ff, #fce7f3, #fef3c7)', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+    } else if (page.layout === 'scrapbook') {
+      gridStyle = { ...gridStyle, background: '#faf8f5' };
+    } else if (page.layout === 'panoramic') {
+      gridStyle = { ...gridStyle, background: '#1a1a2e', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' };
+    } else if (page.layout === 'overlap-duo') {
+      gridStyle = { ...gridStyle, background: 'linear-gradient(135deg, #f5f0eb, #e8e0d8)' };
     }
 
     return (

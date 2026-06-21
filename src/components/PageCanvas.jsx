@@ -440,6 +440,16 @@ export default function PageCanvas({ page, pages, activePageId, onSelectPage, bo
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '2fr 1fr', gap: '4px', padding: '4px' };
     } else if (p.layout === 'grid-4') {
       gridStyle = { ...gridStyle, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '4px', padding: '4px' };
+    } else if (p.layout === 'filmstrip') {
+      gridStyle = { ...gridStyle, background: '#111', display: 'flex', alignItems: 'center', gap: '6px', padding: '24px 10px' };
+    } else if (p.layout === 'circle-focus') {
+      gridStyle = { ...gridStyle, background: 'linear-gradient(135deg, #e0e7ff 0%, #fce7f3 50%, #fef3c7 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' };
+    } else if (p.layout === 'scrapbook') {
+      gridStyle = { ...gridStyle, background: '#faf8f5', display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1.2fr 1fr', gap: '12px', padding: '16px' };
+    } else if (p.layout === 'panoramic') {
+      gridStyle = { ...gridStyle, background: '#1a1a2e', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' };
+    } else if (p.layout === 'overlap-duo') {
+      gridStyle = { ...gridStyle, background: 'linear-gradient(135deg, #f5f0eb 0%, #e8e0d8 100%)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '20px' };
     } else {
       gridStyle = { ...gridStyle, padding: 0 };
     }
@@ -488,6 +498,26 @@ export default function PageCanvas({ page, pages, activePageId, onSelectPage, bo
             } else {
               wrapperStyle = { width: '45%', height: '45%', position: 'absolute', bottom: '12%', right: '6%', border: '4px solid black', boxShadow: '6px 6px 0px black', transform: 'skewX(3deg) rotate(3deg)', zIndex: 10, overflow: 'hidden' };
             }
+          } else if (p.layout === 'filmstrip') {
+            wrapperStyle = { flex: 1, height: '100%', border: '3px solid #333', overflow: 'hidden' };
+          } else if (p.layout === 'circle-focus') {
+            wrapperStyle = { width: '60%', aspectRatio: '1', borderRadius: '50%', overflow: 'hidden', border: '6px solid white', boxShadow: '0 8px 32px rgba(0,0,0,0.15)', flexShrink: 0 };
+          } else if (p.layout === 'scrapbook') {
+            if (idx === 0) {
+              wrapperStyle = { gridColumn: '1 / span 2', border: '5px solid white', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: 'rotate(-2deg)', overflow: 'hidden' };
+            } else if (idx === 1) {
+              wrapperStyle = { border: '5px solid white', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: 'rotate(2deg)', overflow: 'hidden' };
+            } else {
+              wrapperStyle = { border: '5px solid white', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transform: 'rotate(-1deg)', overflow: 'hidden' };
+            }
+          } else if (p.layout === 'panoramic') {
+            wrapperStyle = { width: '100%', height: '45%', overflow: 'hidden' };
+          } else if (p.layout === 'overlap-duo') {
+            if (idx === 0) {
+              wrapperStyle = { border: '5px solid white', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', transform: 'rotate(-2deg)', overflow: 'hidden' };
+            } else {
+              wrapperStyle = { border: '5px solid white', boxShadow: '0 8px 24px rgba(0,0,0,0.12)', transform: 'rotate(3deg)', overflow: 'hidden' };
+            }
           }
 
           return (
@@ -513,6 +543,60 @@ export default function PageCanvas({ page, pages, activePageId, onSelectPage, bo
           <>
             <div style={{ position: 'absolute', top: '-10px', right: '-10px', width: '80px', height: '25px', background: 'rgba(255,255,255,0.7)', transform: 'rotate(45deg)', zIndex: 60, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}></div>
             <div style={{ position: 'absolute', bottom: '30px', left: '-20px', width: '100px', height: '30px', background: 'rgba(255,255,255,0.7)', transform: 'rotate(-15deg)', zIndex: 60, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}></div>
+          </>
+        )}
+
+        {/* Filmstrip sprocket holes */}
+        {p.layout === 'filmstrip' && (
+          <>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '20px', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', padding: '0 8px', zIndex: 50, pointerEvents: 'none' }}>
+              {Array.from({ length: 14 }).map((_, i) => (
+                <div key={`top-${i}`} style={{ width: '8px', height: '6px', borderRadius: '1px', background: '#333' }} />
+              ))}
+            </div>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '20px', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', padding: '0 8px', zIndex: 50, pointerEvents: 'none' }}>
+              {Array.from({ length: 14 }).map((_, i) => (
+                <div key={`bot-${i}`} style={{ width: '8px', height: '6px', borderRadius: '1px', background: '#333' }} />
+              ))}
+            </div>
+            <div style={{ position: 'absolute', bottom: '4px', right: '12px', fontFamily: 'monospace', fontSize: '0.5rem', color: '#555', letterSpacing: '1px', zIndex: 50, pointerEvents: 'none' }}>KODAK 400</div>
+          </>
+        )}
+
+        {/* Circle-focus decorative ring */}
+        {p.layout === 'circle-focus' && (
+          <>
+            <div style={{ position: 'absolute', top: '5%', left: '5%', width: '30px', height: '30px', borderRadius: '50%', border: '2px solid rgba(139,92,246,0.2)', pointerEvents: 'none', zIndex: 5 }} />
+            <div style={{ position: 'absolute', bottom: '8%', right: '8%', width: '20px', height: '20px', borderRadius: '50%', background: 'rgba(244,114,182,0.15)', pointerEvents: 'none', zIndex: 5 }} />
+            <div style={{ position: 'absolute', top: '12%', right: '10%', width: '14px', height: '14px', borderRadius: '50%', background: 'rgba(251,191,36,0.2)', pointerEvents: 'none', zIndex: 5 }} />
+          </>
+        )}
+
+        {/* Scrapbook tape decorations */}
+        {p.layout === 'scrapbook' && (
+          <>
+            <div style={{ position: 'absolute', top: '6%', left: '14%', width: '40px', height: '14px', background: 'rgba(251, 191, 36, 0.55)', transform: 'rotate(-15deg)', zIndex: 50, pointerEvents: 'none', borderRadius: '2px' }} />
+            <div style={{ position: 'absolute', top: '8%', right: '14%', width: '40px', height: '14px', background: 'rgba(244, 114, 182, 0.55)', transform: 'rotate(20deg)', zIndex: 50, pointerEvents: 'none', borderRadius: '2px' }} />
+            <div style={{ position: 'absolute', bottom: '6%', left: '34%', width: '40px', height: '14px', background: 'rgba(96, 165, 250, 0.55)', transform: 'rotate(-8deg)', zIndex: 50, pointerEvents: 'none', borderRadius: '2px' }} />
+            <div style={{ position: 'absolute', bottom: '40%', right: '3%', width: '35px', height: '14px', background: 'rgba(52, 211, 153, 0.45)', transform: 'rotate(12deg)', zIndex: 50, pointerEvents: 'none', borderRadius: '2px' }} />
+          </>
+        )}
+
+        {/* Panoramic gradient accent bars */}
+        {p.layout === 'panoramic' && (
+          <>
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '25%', background: 'linear-gradient(to right, #6366f1, #8b5cf6, #a855f7)', opacity: 0.12, zIndex: 1, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '25%', background: 'linear-gradient(to right, #f43f5e, #ec4899, #d946ef)', opacity: 0.12, zIndex: 1, pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: '10%', left: '4%', fontFamily: 'var(--font-serif)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '3px', textTransform: 'uppercase', zIndex: 5, pointerEvents: 'none' }}>CINEMATIC</div>
+            <div style={{ position: 'absolute', bottom: '10%', right: '4%', fontFamily: 'var(--font-serif)', fontSize: '0.6rem', color: 'rgba(255,255,255,0.25)', letterSpacing: '3px', textTransform: 'uppercase', zIndex: 5, pointerEvents: 'none' }}>2.39 : 1</div>
+          </>
+        )}
+
+        {/* Overlap duo decorative corners */}
+        {p.layout === 'overlap-duo' && (
+          <>
+            <div style={{ position: 'absolute', top: '4%', right: '4%', width: '24px', height: '24px', border: '2px solid rgba(139,92,246,0.15)', borderRadius: '4px', pointerEvents: 'none', zIndex: 5 }} />
+            <div style={{ position: 'absolute', bottom: '4%', left: '4%', width: '24px', height: '24px', border: '2px solid rgba(244,114,182,0.15)', borderRadius: '4px', pointerEvents: 'none', zIndex: 5 }} />
           </>
         )}
 

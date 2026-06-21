@@ -61,7 +61,9 @@ function App() {
     if (layout === 'comic-pop-cover') return 2;
     if (layout === 'city-pop-cover') return 1;
     if (layout === 'retro-groovy-cover') return 1;
-    return 1; // full, polaroid, cover, magazine-cover, polaroid-tape
+    if (layout === 'filmstrip' || layout === 'scrapbook') return 3;
+    if (layout === 'overlap-duo') return 2;
+    return 1; // full, polaroid, cover, magazine-cover, polaroid-tape, circle-focus, panoramic
   };
 
   const handleAddPage = () => {
@@ -264,9 +266,9 @@ function App() {
     
     // Available layouts categorized by number of slots
     const layoutsBySlots = {
-      1: ['full', 'polaroid', 'polaroid-tape'],
-      2: ['grid-2', 'asym-2'],
-      3: ['grid-3'],
+      1: ['full', 'polaroid', 'polaroid-tape', 'circle-focus', 'panoramic'],
+      2: ['grid-2', 'asym-2', 'overlap-duo'],
+      3: ['grid-3', 'filmstrip', 'scrapbook'],
       4: ['grid-4']
     };
     

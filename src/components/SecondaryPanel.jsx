@@ -257,6 +257,67 @@ export default function SecondaryPanel({ activeTab, uploadedImages, onImagesUplo
               </div>
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>4 Images (Grid)</p>
             </div>
+
+            <div style={{ padding: '0.5rem 0', fontWeight: 'bold', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Creative Layouts</div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'filmstrip' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'filmstrip' })}
+            >
+              <div style={{ display: 'flex', gap: '4px', width: '100%', height: '80px', background: '#111', padding: '16px 8px', boxSizing: 'border-box', alignItems: 'center' }}>
+                <div style={{ flex: 1, height: '100%', background: '#666', border: '2px solid #333' }}></div>
+                <div style={{ flex: 1, height: '100%', background: '#888', border: '2px solid #333' }}></div>
+                <div style={{ flex: 1, height: '100%', background: '#666', border: '2px solid #333' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Film Strip (3 pics)</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'circle-focus' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'circle-focus' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: 'linear-gradient(135deg, #e0e7ff, #fce7f3, #fef3c7)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '4px' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#ccc', border: '3px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Circle Focus</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'scrapbook' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'scrapbook' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: '#faf8f5', position: 'relative', overflow: 'hidden', borderRadius: '4px' }}>
+                <div style={{ width: '28px', height: '24px', background: '#bbb', border: '2px solid white', position: 'absolute', top: '10%', left: '10%', transform: 'rotate(-5deg)' }}></div>
+                <div style={{ width: '28px', height: '24px', background: '#aaa', border: '2px solid white', position: 'absolute', top: '15%', right: '15%', transform: 'rotate(3deg)' }}></div>
+                <div style={{ width: '30px', height: '24px', background: '#999', border: '2px solid white', position: 'absolute', bottom: '10%', left: '30%', transform: 'rotate(-2deg)' }}></div>
+                <div style={{ width: '16px', height: '6px', background: 'rgba(251,191,36,0.6)', position: 'absolute', top: '8%', left: '18%', transform: 'rotate(-15deg)' }}></div>
+                <div style={{ width: '16px', height: '6px', background: 'rgba(244,114,182,0.6)', position: 'absolute', top: '12%', right: '22%', transform: 'rotate(20deg)' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Scrapbook (3 pics)</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'panoramic' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'panoramic' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: '#1a1a2e', display: 'flex', flexDirection: 'column', justifyContent: 'center', borderRadius: '4px', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '35px', background: '#555', margin: '0 auto' }}></div>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '20px', background: 'linear-gradient(to right, #6366f1, #a855f7)', opacity: 0.2 }}></div>
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '20px', background: 'linear-gradient(to right, #f43f5e, #d946ef)', opacity: 0.2 }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Panoramic</p>
+            </div>
+
+            <div 
+              style={{ padding: '1rem', border: `2px solid ${activePage?.layout === 'overlap-duo' ? 'var(--primary-color)' : 'var(--border-color)'}`, borderRadius: 'var(--radius-md)', cursor: 'pointer', marginBottom: '1rem' }}
+              onClick={() => activePage && onUpdatePage(activePage.id, { layout: 'overlap-duo' })}
+            >
+              <div style={{ width: '100%', height: '80px', background: 'linear-gradient(135deg, #f5f0eb, #e8e0d8)', position: 'relative', overflow: 'hidden', borderRadius: '4px' }}>
+                <div style={{ width: '40px', height: '45px', background: '#bbb', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', position: 'absolute', top: '10%', left: '20%', transform: 'rotate(-3deg)' }}></div>
+                <div style={{ width: '40px', height: '45px', background: '#aaa', border: '3px solid white', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', position: 'absolute', bottom: '10%', right: '20%', transform: 'rotate(4deg)' }}></div>
+              </div>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.875rem' }}>Overlap Duo (2 pics)</p>
+            </div>
           </div>
         </>
       )}
